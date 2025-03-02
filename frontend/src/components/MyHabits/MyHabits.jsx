@@ -8,6 +8,7 @@ const DesktopContainer = styled.div`
   @media only screen and (max-width: 699px) {
     display: none;
   }
+  padding: 16px;
 `;
 const MobileContainer = styled.div`
   @media only screen and (min-width: 700px) {

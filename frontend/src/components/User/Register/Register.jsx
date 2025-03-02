@@ -5,7 +5,11 @@ import { registerUser, resetRegisterState } from "components/User/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const PageContainer = styled.div`
-  padding-top: 10px;
+  flex: 1; /* Take remaining space */
+  display: flex; /* Ensure children inside can use flex */
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 `;
 
 const PageTitle = styled.div`
@@ -18,6 +22,7 @@ const RegisterContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 `;
 
 const FormTitle = styled.div`
@@ -40,6 +45,7 @@ const InputSection = styled.div`
   input {
     padding: 5px;
     border: 2px solid #e3e3e3;
+    min-width: "200px"
     :focus {
       outline: 2px solid #9da631;
       border: none;
@@ -109,7 +115,7 @@ const Register = () => {
   useEffect(() => {
     if (loggedInUser) {
       // redirect
-      history.push("/habits");
+      history.push("/");
     }
   }, [loggedInUser, history]);
 
@@ -124,7 +130,6 @@ const Register = () => {
 
   return (
     <PageContainer>
-      <PageTitle>Consistency</PageTitle>
       <RegisterContainer>
         <FormTitle>Register</FormTitle>
         {error && <ErrorSection>{findError("registrationError")}</ErrorSection>}

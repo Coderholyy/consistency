@@ -1,6 +1,6 @@
 import express from "express";
-import { pool } from "../db/dbConnect";
-import { getAuthUser } from "../util";
+import pool from "../db.js";
+import { getAuthUser } from "../util.js";
 
 const router = express.Router();
 

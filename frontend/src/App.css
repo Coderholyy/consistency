@@ -1,0 +1,6 @@
+#root {
+  display: flex;
+  flex-direction: column; /* Header on top, main below */
+  height: 100vh;
+  color: white;
+}

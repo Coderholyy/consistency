@@ -5,7 +5,11 @@ import { signinUser, resetSigninState } from "components/User/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const PageContainer = styled.div`
-  padding-top: 10px;
+  flex: 1; /* Take remaining space */
+  display: flex; /* Ensure children inside can use flex */
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 `;
 
 const PageTitle = styled.div`
@@ -17,7 +21,9 @@ const PageTitle = styled.div`
 const SigninContainer = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+  width: 100%;
 `;
 
 const FormTitle = styled.div`
@@ -106,7 +112,7 @@ const Signin = () => {
   useEffect(() => {
     if (loggedInUser) {
       // redirect
-      history.push("/habits");
+      history.push("/");
     }
   }, [loggedInUser, history]);
 
@@ -121,7 +127,6 @@ const Signin = () => {
 
   return (
     <PageContainer>
-      <PageTitle>Consistency</PageTitle>
       <SigninContainer>
         <FormTitle>Sign-in</FormTitle>
         {error && <ErrorSection>{findError("userNotFound")}</ErrorSection>}

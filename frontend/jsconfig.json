@@ -1,7 +1,12 @@
 {
   "compilerOptions": {
     "baseUrl": "src",
-    "jsx": "react"
+    "paths": {
+      "@components/*": ["components/*"],
+      "@utils/*": ["utils/*"]
+    },
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-jsx"
   },
   "include": ["src"]
 }

@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import config from "./config";
+import config from "./config.js";
 
 export const getToken = (userInfo) => {
   return jwt.sign(userInfo, config.JWT_SECRET, { expiresIn: "24h" });
