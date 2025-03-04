@@ -8,32 +8,35 @@ import Profile from "../../assets/profile.png";
 const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  // padding: 10px 20px;
   align-items: center;
-  background-color: white;
+  background: #f0f4f8;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 `;
 
-const HeaderLeftItem = styled.div`
-  flex: 1;
+const HeaderLogoItem = styled.h2`
+  flex: 0;
   display: flex;
   justify-content: flex-start;
   font-size: 22px;
-  // font-weight: bold;
-  color: rgb(1, 53, 164); // rgb(14, 15, 15);
-  &:has(img) {
-    flex: 0;
-  }
+  margin: 0;
   img {
     padding: 8px;
     // height: 30px;
     // width: 30px;
   }
 `;
-const HeaderItem = styled.div`
-  flex: 2;
+
+const HeaderBrandItem = styled.h2`
+  flex: 1;
   display: flex;
-  gap: 16px;
-  justify-content: center;
+  justify-content: flex-start;
+  font-size: 22px;
+`;
+const HeaderItem = styled.div`
+  flex: 1;
+  display: flex;
+  // gap: 16px;
+  justify-content: space-around;
   :last-child {
     padding: 0;
   }
@@ -44,11 +47,11 @@ const HeaderNavItem = styled.div`
   text-decoration: none;
   font-size: 16px;
   font-weight: ${(props) => (props.active ? 600 : 500)};
-  // color: black;
-  color: ${(props) => (props.active ? "rgb(1, 53, 164)" : "black")};
+  color: ${(props) =>
+    props.active ? "var(--primary-color)" : "var(--text-light)"};
   :hover {
     cursor: pointer;
-    color: #174fc8;
+    color: var(--primary-color);
   }
 `;
 
@@ -59,18 +62,39 @@ const HeaderRightItem = styled.div`
   &:has(img) {
     flex: 0;
   }
+  &:has(button) {
+    justify-content: center;
+  }
 `;
 
 const SignoutButton = styled.button`
-  background-color: white;
+  // background-color: white;
   border: none;
-  border-radius: 2px;
+  // border-radius: 2px;
   padding: 10px 12px 10px 12px;
+  color: var(--text-light)
   :hover {
     cursor: pointer;
     font-weight: 500;
   }
 `;
+
+// export const StyledNavItem = styled(NavLink)`
+//   padding: 10px 15px;
+//   color: var(--text-light);
+//   font-size: 16px;
+//   text-decoration: none;
+//   transition: color 0.3s ease-in-out;
+
+//   &.active {
+//     color: var(--primary-color); /* Highlight active link */
+//     font-weight: bold;
+//   }
+
+//   &:hover {
+//     color: var(--primary-color);
+//   }
+// `;
 
 const Header = () => {
   const history = useHistory();
@@ -85,10 +109,10 @@ const Header = () => {
 
   return (
     <HeaderContainer>
-      <HeaderLeftItem>
+      <HeaderLogoItem>
         <img src={Logo} height={"40px"} width={"40px"} />
-      </HeaderLeftItem>
-      <HeaderLeftItem>Consistency</HeaderLeftItem>
+      </HeaderLogoItem>
+      <HeaderBrandItem>Consistency</HeaderBrandItem>
       {loggedInUser && (
         <HeaderItem>
           <HeaderNavItem

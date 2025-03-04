@@ -2,7 +2,7 @@ import { useUserId } from "hooks/useUserId";
 import React, { useState, useEffect } from "react";
 import { formatDate } from "utils/formatDate";
 
-const LogTracking = ({ title, trackingId, type }) => {
+const LogTracking = ({ title, trackingId, type, isHistory = false }) => {
   const userId = useUserId();
   const [logs, setLogs] = useState([]);
   const [quantity, setQuantity] = useState("");
@@ -58,20 +58,24 @@ const LogTracking = ({ title, trackingId, type }) => {
           Log
         </button>
       </div>
-      <h3 className="mt-4 font-medium" onClick={fetchLogs}>
-        History
-      </h3>
-      <ul className="mt-2 border-t pt-2 max-h-20">
-        {Array.isArray(logs) &&
-          logs.map((log, index) => (
-            <li key={index} className="flex justify-between p-2 border-b">
-              <span>{log.quantity}</span>
-              <span className="text-sm text-gray-500">
-                {formatDate(log?.timestamp)}
-              </span>
-            </li>
-          ))}
-      </ul>
+      {isHistory && (
+        <React.Fragment>
+          <h5 className="mt-4 font-medium" onClick={fetchLogs}>
+            History
+          </h5>
+          <ul className="mt-2 border-t pt-2 max-h-20">
+            {Array.isArray(logs) &&
+              logs.map((log, index) => (
+                <li key={index} className="flex justify-between p-2 border-b">
+                  <span>{log.quantity}</span>
+                  <span className="text-sm text-gray-500">
+                    {formatDate(log?.timestamp)}
+                  </span>
+                </li>
+              ))}
+          </ul>
+        </React.Fragment>
+      )}
     </div>
   );
 };

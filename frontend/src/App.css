@@ -2,5 +2,7 @@
   display: flex;
   flex-direction: column; /* Header on top, main below */
   height: 100vh;
-  color: white;
+  color: rgb(0, 0, 0);
+  background: linear-gradient(to bottom, #f0f4f8, #ebeff5);
+  color: #333333;
 }

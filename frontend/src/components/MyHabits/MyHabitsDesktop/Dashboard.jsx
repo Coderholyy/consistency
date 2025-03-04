@@ -3,37 +3,40 @@ import LogTracking from "./LogTracking";
 import { useUserId } from "hooks/useUserId";
 import styled from "styled-components";
 
-const GridContainer = styled.div`
-  display: grid;
-  grid-template-columns: auto auto auto auto;
-  grid-gap: 10px;
-  gap: 16px;
-  color: black;
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
 `;
-const TrackingGridItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+
+const TableHeader = styled.th`
   border: 1px solid #ddd;
-  // padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-  background: #fff;
-  transition: transform 0.2s ease-in-out;
-  text-align: center;
+  padding: 8px;
+  background-color: #f2f2f2;
+  text-align: left;
+  font-size: 0.8rem;
+`;
+
+const TableRow = styled.tr`
+  &:nth-child(even) {
+    background-color: #f9f9f9;
+  }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.15);
+    background-color: #f1f1f1;
   }
+`;
+
+const TableCell = styled.td`
+  border: 1px solid #ddd;
+  padding: 8px;
 `;
 
 const TrackingDashboard = () => {
   const userId = useUserId();
   const [trackings, setTrackings] = useState([]);
-  // type switch TODO to be global state based on
   const type = "habit";
+
   useEffect(() => {
     fetchTrackings();
   }, []);
@@ -50,29 +53,38 @@ const TrackingDashboard = () => {
 
   return (
     <div className="p-6">
-      <h3 className="text-2xl font-bold mb-4 mt-0">Tracking Dashboard</h3>
-      <GridContainer>
-        {trackings.length > 0 ? (
-          trackings.map((tracking, index) => (
-            <TrackingGridItem key={tracking.id}>
-              <h2 className="text-lg font-semibold">{tracking.title}</h2>
-              <p className="text-sm text-gray-600">
-                Frequency: {tracking.frequency}
-              </p>
-              <p className="text-sm text-gray-600">Type: {tracking.type}</p>
-
-              <LogTracking
-                title={tracking.title}
-                trackingId={tracking.id}
-                type={tracking.type}
-                key={index}
-              />
-            </TrackingGridItem>
-          ))
-        ) : (
-          <p>No trackings found.</p>
-        )}
-      </GridContainer>
+      <h4 className="text-2xl font-bold mb-4 mt-0">Tracking Dashboard</h4>
+      {trackings.length > 0 ? (
+        <Table>
+          <thead>
+            <tr>
+              <TableHeader>Title</TableHeader>
+              <TableHeader>Frequency</TableHeader>
+              <TableHeader>Type</TableHeader>
+              <TableHeader>Actions</TableHeader>
+            </tr>
+          </thead>
+          <tbody>
+            {trackings.map((tracking, index) => (
+              <TableRow key={tracking.id}>
+                <TableCell>{tracking.title}</TableCell>
+                <TableCell>{tracking.frequency}</TableCell>
+                <TableCell>{tracking.type}</TableCell>
+                <TableCell>
+                  <LogTracking
+                    title={tracking.title}
+                    trackingId={tracking.id}
+                    type={tracking.type}
+                    key={index}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </tbody>
+        </Table>
+      ) : (
+        <p>No trackings found.</p>
+      )}
     </div>
   );
 };

@@ -8,17 +8,33 @@ import Signin from "components/User/Signin";
 import ErrorBoundary from "components/ErrorBoundary.js";
 import Goals from "components/Goals";
 import Header from "components/Header";
+import { GlobalStyle } from "app/GlobalStyles";
+import styled from "styled-components";
+
+const Container = styled.div`
+  padding: 1rem;
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    padding: 0.5rem;
+  }
+`;
 
 function App() {
   return (
     <ErrorBoundary>
+      <GlobalStyle />
       <BrowserRouter>
         <Header />
-        <Route path="/" component={MyHabits} exact={true} />
-        <Route path="/tracking" component={Tracking} exact={true} />
-        <Route path="/register" component={Register} exact={true} />
-        <Route path="/signin" component={Signin} exact={true} />
-        <Route path="/goals" component={Goals} exact={true} />
+        <Container>
+          <Route path="/" component={MyHabits} exact={true} />
+          <Route path="/tracking" component={Tracking} exact={true} />
+          <Route path="/register" component={Register} exact={true} />
+          <Route path="/signin" component={Signin} exact={true} />
+          <Route path="/goals" component={Goals} exact={true} />
+        </Container>
       </BrowserRouter>
     </ErrorBoundary>
   );
