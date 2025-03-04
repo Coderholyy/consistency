@@ -3,6 +3,7 @@ import LogTracking from "../MyHabits/MyHabitsDesktop/LogTracking";
 import { useUserId } from "hooks/useUserId";
 import styled from "styled-components";
 import CreateTracking from "../MyHabits/MyHabitsDesktop/CreateTracking";
+// import AddBoxIcon from "@mui/icons-material/AddBox";
 
 const GridContainer = styled.div`
   display: grid;
@@ -10,6 +11,13 @@ const GridContainer = styled.div`
   grid-gap: 10px;
   gap: 16px;
   color: black;
+`;
+
+const FlexHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 `;
 const TrackingGridItem = styled.div`
   display: flex;
@@ -51,15 +59,15 @@ const Tracking = () => {
 
   return (
     <div className="p-6">
-      <GridContainer>
+      <FlexHeader>
+        <h4 className="text-2xl font-bold mb-4 mt-0">My Trackings</h4>
         <CreateTracking />
-      </GridContainer>
-      <h3 className="text-2xl font-bold mb-4 mt-0">My Trackings</h3>
+      </FlexHeader>
       <GridContainer>
         {trackings.length > 0 ? (
           trackings.map((tracking, index) => (
             <TrackingGridItem key={tracking.id}>
-              <h2 className="text-lg font-semibold">{tracking.title}</h2>
+              <h5 className="text-lg font-semibold">{tracking.title}</h5>
               <p className="text-sm text-gray-600">
                 Frequency: {tracking.frequency}
               </p>

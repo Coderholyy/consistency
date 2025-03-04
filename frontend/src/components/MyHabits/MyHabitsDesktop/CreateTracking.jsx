@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useUserId } from "hooks/useUserId";
 import GenericForm from "../../common/Form";
+import GenericFormWithModal from "../../common/FormWIthModal";
 
 const CreateTracking = () => {
   const userId = useUserId();
@@ -39,7 +40,7 @@ const CreateTracking = () => {
   };
 
   return (
-    <GenericForm
+    <GenericFormWithModal
       onSubmit={handleSubmit}
       title="Create Tracking"
       fields={[
@@ -107,53 +108,10 @@ const CreateTracking = () => {
           ],
         },
       ]}
+      buttonChildren={"+"}
     >
       <button type="submit">Create</button>
-    </GenericForm>
-    // <form onSubmit={handleSubmit} className="form">
-    //   <h5 className="text-xl font-bold">Create Tracking</h5>
-    //   <div className="form">
-    //     <input
-    //       type="text"
-    //       name="title"
-    //       value={formData.title}
-    //       onChange={handleChange}
-    //       placeholder="Title"
-    //       required
-    //     />
-
-    //     <select name="type" value={formData.type} onChange={handleChange}>
-    //       <option value="habit">Habit</option>
-    //       <option value="money">Money</option>
-    //       <option value="diet">Diet</option>
-    //     </select>
-
-    //     <input
-    //       type="number"
-    //       name="repeat_interval"
-    //       value={formData.repeat_interval}
-    //       onChange={handleChange}
-    //       placeholder="Frequency"
-    //       min="1"
-    //     />
-
-    //     <input
-    //       type="number"
-    //       name="goal"
-    //       placeholder="Goal"
-    //       value={formData.goal}
-    //       onChange={handleChange}
-    //       min="1"
-    //     />
-
-    //     <select name="unit" value={formData.unit} onChange={handleChange}>
-    //       <option value="calories">Calories</option>
-    //       <option value="currency">Currency</option>
-    //       <option value="times">Time</option>
-    //     </select>
-    //   </div>
-
-    // </form>
+    </GenericFormWithModal>
   );
 };
 

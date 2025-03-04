@@ -75,7 +75,7 @@ const Goals = () => {
       ) : (
         <>
           <GoalsHeader>
-            <TitleSection>goals</TitleSection>
+            <h4>Goals</h4>
             <AddGoalButton />
           </GoalsHeader>
           {goalsList &&

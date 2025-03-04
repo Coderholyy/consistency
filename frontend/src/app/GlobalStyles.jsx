@@ -125,4 +125,30 @@ export const GlobalStyle = createGlobalStyle`
     border-color: var(--input-focus-border);
     box-shadow: 0 0 6px var(--input-focus-shadow);
   }
+
+  p {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    color: var(--text-color, #333); /* Uses theme variable */
+    line-height: 1.5;
+  }
+
+  /* Inside Table Cells */
+  td p {
+    font-size: 13px;
+    color: #555;
+  }
+
+  /* Inside Buttons */
+  button p {
+    font-weight: bold;
+    color: inherit; /* Takes button text color */
+  }
+
+  /* Inside Modals */
+  .modal-content p {
+    font-size: 15px;
+    color: #222;
+  }
 `;

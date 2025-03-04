@@ -43,7 +43,7 @@ const LogTracking = ({ title, trackingId, type, isHistory = false }) => {
   return (
     <div className="p-4 border rounded-md shadow">
       {/* <h2 className="text-lg font-semibold">Log Progress</h2> */}
-      <div className="flex gap-2 mt-2">
+      <div style={{ display: "flex", gap: "1rem" }}>
         <input
           type="number"
           value={quantity}
