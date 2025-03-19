@@ -16,8 +16,11 @@ import pool from "./db.js";
 
 const alterTables = async () => {
   const query = `
-   ALTER TABLE to_do_list
-   UPDATE due_time type TIME;
+   ALTER TABLE to_do_list ADD COLUMN due_time_temp TIME;
+    UPDATE to_do_list SET due_time_temp = due_time::TIME;
+    ALTER TABLE to_do_list DROP COLUMN due_time;
+    ALTER TABLE to_do_list RENAME COLUMN due_time_temp TO due_time;
+
   `;
 
   try {
