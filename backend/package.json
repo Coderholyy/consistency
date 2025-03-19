@@ -11,9 +11,13 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "cors": "^2.8.5",
+    "dot-env": "^0.0.1",
+    "dotenv": "^16.4.7",
     "express": "^4.17.1",
     "express-validator": "^6.9.2",
     "jsonwebtoken": "^8.5.1",
+    "node-cron": "^3.0.3",
     "pg": "^8.5.1"
   },
   "devDependencies": {

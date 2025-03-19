@@ -65,6 +65,33 @@ const createTables = async () => {
     );
 
     ALTER TABLE trackings ADD COLUMN IF NOT EXISTS goal_id INT REFERENCES goals(id) ON DELETE SET NULL;
+
+    CREATE TABLE IF NOT EXISTS to_do_list (
+        id SERIAL PRIMARY KEY,
+        user_id INT REFERENCES users(id) ON DELETE CASCADE,
+        tracking_id INT REFERENCES trackings(id) ON DELETE CASCADE,
+        due_time TIMESTAMP NOT NULL,
+        status BOOLEAN DEFAULT FALSE,  -- FALSE means pending, TRUE means completed
+        created_at TIMESTAMP DEFAULT NOW()
+    );
+
+    ALTER TABLE to_do_list
+    ADD COLUMN generated_from TIMESTAMP; 
+
+    ALTER TABLE to_do_list 
+    ALTER COLUMN status SET DEFAULT 'PENDING';
+
+    CREATE TABLE milestones (
+        id SERIAL PRIMARY KEY,
+        user_id INT REFERENCES users(id) ON DELETE CASCADE,
+        name TEXT NOT NULL,
+        description TEXT,
+        goal_type TEXT CHECK (goal_type IN ('DAILY', 'WEEKLY', 'STREAKS')),
+        required_value INT NOT NULL, -- Number of tasks/habits/streaks required
+        tracking_id INT REFERENCES trackings(id) ON DELETE CASCADE,
+        achieved BOOLEAN DEFAULT FALSE,
+        achieved_on TIMESTAMP
+    );
   `;
 
   try {

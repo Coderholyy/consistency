@@ -1,7 +1,9 @@
 import poolPkg from "pg";
 const { Pool } = poolPkg;
+import dotenv from "dotenv";
 // import { Pool } from "pg";
 
+dotenv.config();
 const pool = new Pool({
   user: "shanmukhasudheendra",
   password: "N8npREcrdxFYshgB",
