@@ -1,5 +1,5 @@
-// import pool from "./db.js";
-const pool = require("./db"); // ✅ Use require() instead of import
+import pool from "./db.js";
+// const pool = require("./db"); // ✅ Use require() instead of import
 const createTables = async () => {
   const query = `
    CREATE TABLE users (
