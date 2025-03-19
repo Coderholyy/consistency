@@ -44,7 +44,7 @@ CREATE TABLE to_do_list (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL,
     tracking_id INTEGER NOT NULL,
-    due_time TIMESTAMP,
+    due_time TIME,
     status TEXT CHECK (status IN ('pending', 'completed', 'overdue')),
     created_at TIMESTAMP DEFAULT NOW(),
     generated_from TEXT,
