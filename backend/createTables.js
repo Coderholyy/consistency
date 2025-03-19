@@ -99,8 +99,6 @@ CREATE TABLE tracking_logs (
     log_time TIMESTAMP DEFAULT NOW(),
     FOREIGN KEY (tracking_id) REFERENCES trackings(id) ON DELETE CASCADE
 );
-
-    );
   `;
 
   try {
