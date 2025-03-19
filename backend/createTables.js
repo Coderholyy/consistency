@@ -2,95 +2,104 @@
 const pool = require("./db"); // ✅ Use require() instead of import
 const createTables = async () => {
   const query = `
-    CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        email VARCHAR(255) UNIQUE NOT NULL,
-        password VARCHAR(255) NOT NULL,
-        created_at TIMESTAMP DEFAULT NOW()
-    );
+   CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    firstname VARCHAR(100) NOT NULL,
+    lastname VARCHAR(100) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    passwordhash TEXT NOT NULL
+);
 
-    CREATE TABLE IF NOT EXISTS trackings (
-        id SERIAL PRIMARY KEY,
-        user_id INT REFERENCES users(id) ON DELETE CASCADE,
-        type VARCHAR(50) NOT NULL CHECK (type IN ('habit', 'money', 'diet')),
-        title VARCHAR(255) NOT NULL,
-        frequency VARCHAR(50),
-        repeat_interval INT,
-        goal INT,
-        unit VARCHAR(50),
-        streak INT DEFAULT 0,
-        max_streak INT DEFAULT 0,
-        last_logged_date DATE,
-        timestamp TIMESTAMP DEFAULT NOW(),
-        status BOOLEAN DEFAULT FALSE
-    );
+CREATE TABLE goals (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    userid INTEGER NOT NULL,
+    FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
+);
 
-    CREATE TABLE IF NOT EXISTS tracking_logs (
-        id SERIAL PRIMARY KEY,
-        tracking_id INT REFERENCES trackings(id) ON DELETE CASCADE,
-        user_id INT REFERENCES users(id) ON DELETE CASCADE,
-        timestamp TIMESTAMP DEFAULT NOW(),
-        quantity INT NOT NULL
-    );
+CREATE TABLE trackings (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    type TEXT NOT NULL CHECK (type IN ('habit', 'money', 'diet', 'task')),
+    title VARCHAR(255) NOT NULL,
+    frequency TEXT CHECK (frequency IN ('daily', 'weekly', 'monthly', 'yearly')),
+    repeat_interval INTEGER,
+    goal BOOLEAN DEFAULT FALSE,
+    streak INTEGER DEFAULT 0,
+    max_streak INTEGER DEFAULT 0,
+    last_logged_date TIMESTAMP,
+    timestamp TIMESTAMP DEFAULT NOW(),
+    status BOOLEAN DEFAULT TRUE,
+    goal_id INTEGER,
+    unit TEXT,
+    current_streak INTEGER DEFAULT 0,
+    missed_streaks INTEGER DEFAULT 0,
+    delayed_streaks INTEGER DEFAULT 0,
+    next_due_time TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (goal_id) REFERENCES goals(id) ON DELETE SET NULL
+);
 
-    CREATE TABLE IF NOT EXISTS money_tracking (
-        id SERIAL PRIMARY KEY,
-        tracking_id INT REFERENCES trackings(id) ON DELETE CASCADE,
-        amount DECIMAL(10,2) NOT NULL,
-        category VARCHAR(100) NOT NULL
-    );
+CREATE TABLE to_do_list (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    tracking_id INTEGER NOT NULL,
+    due_time TIMESTAMP,
+    status TEXT CHECK (status IN ('pending', 'completed', 'overdue')),
+    created_at TIMESTAMP DEFAULT NOW(),
+    generated_from TEXT,
+    due_date TIMESTAMP,
+    completed BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (tracking_id) REFERENCES trackings(id) ON DELETE CASCADE
+);
 
-    CREATE TABLE IF NOT EXISTS diet_tracking (
-        id SERIAL PRIMARY KEY,
-        tracking_id INT REFERENCES trackings(id) ON DELETE CASCADE,
-        calories INT NOT NULL,
-        category VARCHAR(100) NOT NULL
-    );
+CREATE TABLE diet_tracking (
+    id SERIAL PRIMARY KEY,
+    tracking_id INTEGER NOT NULL,
+    calories INTEGER NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    FOREIGN KEY (tracking_id) REFERENCES trackings(id) ON DELETE CASCADE
+);
 
-    CREATE TABLE IF NOT EXISTS goals (
-        id SERIAL PRIMARY KEY,
-        user_id INT REFERENCES users(id) ON DELETE CASCADE,
-        title TEXT NOT NULL,
-        description TEXT,
-        target_count INT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
+CREATE TABLE money_tracking (
+    id SERIAL PRIMARY KEY,
+    tracking_id INTEGER NOT NULL,
+    amount NUMERIC(10,2) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    FOREIGN KEY (tracking_id) REFERENCES trackings(id) ON DELETE CASCADE
+);
 
-    CREATE TABLE IF NOT EXISTS goal_dependencies (
-        id SERIAL PRIMARY KEY,
-        goal_id INT REFERENCES goals(id) ON DELETE CASCADE,
-        tracking_item_id INT REFERENCES trackings(id) ON DELETE CASCADE,
-        dependency_type TEXT CHECK (dependency_type IN ('habit_completion', 'frequency_count')) NOT NULL
-    );
+CREATE TABLE goal_dependencies (
+    id SERIAL PRIMARY KEY,
+    goal_id INTEGER NOT NULL,
+    tracking_item_id INTEGER NOT NULL,
+    dependency_type TEXT CHECK (dependency_type IN ('habit_completion', 'frequency_count')),
+    FOREIGN KEY (goal_id) REFERENCES goals(id) ON DELETE CASCADE,
+    FOREIGN KEY (tracking_item_id) REFERENCES trackings(id) ON DELETE CASCADE
+);
 
-    ALTER TABLE trackings ADD COLUMN IF NOT EXISTS goal_id INT REFERENCES goals(id) ON DELETE SET NULL;
+CREATE TABLE milestones (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT,
+    goal_type TEXT CHECK (goal_type IN ('DAILY', 'WEEKLY', 'MONTHLY')),
+    required_value INTEGER NOT NULL,
+    tracking_id INTEGER NOT NULL,
+    achieved BOOLEAN DEFAULT FALSE,
+    achieved_on TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (tracking_id) REFERENCES trackings(id) ON DELETE CASCADE
+);
 
-    CREATE TABLE IF NOT EXISTS to_do_list (
-        id SERIAL PRIMARY KEY,
-        user_id INT REFERENCES users(id) ON DELETE CASCADE,
-        tracking_id INT REFERENCES trackings(id) ON DELETE CASCADE,
-        due_time TIMESTAMP NOT NULL,
-        status BOOLEAN DEFAULT FALSE,  -- FALSE means pending, TRUE means completed
-        created_at TIMESTAMP DEFAULT NOW()
-    );
+CREATE TABLE tracking_logs (
+    id SERIAL PRIMARY KEY,
+    tracking_id INTEGER NOT NULL,
+    log_time TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY (tracking_id) REFERENCES trackings(id) ON DELETE CASCADE
+);
 
-    ALTER TABLE to_do_list
-    ADD COLUMN generated_from TIMESTAMP; 
-
-    ALTER TABLE to_do_list 
-    ALTER COLUMN status SET DEFAULT 'PENDING';
-
-    CREATE TABLE milestones (
-        id SERIAL PRIMARY KEY,
-        user_id INT REFERENCES users(id) ON DELETE CASCADE,
-        name TEXT NOT NULL,
-        description TEXT,
-        goal_type TEXT CHECK (goal_type IN ('DAILY', 'WEEKLY', 'STREAKS')),
-        required_value INT NOT NULL, -- Number of tasks/habits/streaks required
-        tracking_id INT REFERENCES trackings(id) ON DELETE CASCADE,
-        achieved BOOLEAN DEFAULT FALSE,
-        achieved_on TIMESTAMP
     );
   `;
 
