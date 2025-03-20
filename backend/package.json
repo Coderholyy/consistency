@@ -5,7 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "build": "node mock.js && nodemon --exec babel-node server.js",
+    "build": "node server.js",
     "start": "nodemon --exec babel-node server.js"
   },
   "author": "",

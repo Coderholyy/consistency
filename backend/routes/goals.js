@@ -19,7 +19,7 @@ router.get("/", getAuthUser, async (req, res) => {
   });
 
   const AllGoals = queryRes.rows;
-  res.send(AllGoals);
+  res.json({ success: true, data: AllGoals });
 });
 
 router.post("/create", getAuthUser, async (req, res) => {
@@ -34,9 +34,12 @@ router.post("/create", getAuthUser, async (req, res) => {
   await pool.query(createGoalQuery).catch(() => {
     return res
       .status(401)
-      .send([{ param: "create error", msg: "Error creating goal" }]);
+      .json({
+        error: "Not created",
+        data: [{ param: "create error", msg: "Error creating goal" }],
+      });
   });
-  res.status(200).send();
+  res.status(200).json({ success: true, data: { goalName } });
 });
 
 router.put("/update/:id", getAuthUser, async (req, res) => {
@@ -50,11 +53,9 @@ router.put("/update/:id", getAuthUser, async (req, res) => {
   };
 
   await pool.query(updateGoalQuery).catch(() => {
-    return res
-      .status(401)
-      .send([{ param: "update error", msg: "Error updating goal" }]);
+    return res.status(401).json({ error: "Error updating goal" });
   });
-  res.status(200).send();
+  res.status(200).json({ success: true, data: { goalName, goalID } });
 });
 
 router.delete("/delete/:id", getAuthUser, async (req, res) => {
@@ -67,11 +68,9 @@ router.delete("/delete/:id", getAuthUser, async (req, res) => {
   };
 
   await pool.query(deleteGoalQuery).catch(() => {
-    return res
-      .status(401)
-      .send([{ param: "delete error", msg: "Error deleting goal" }]);
+    return res.status(401).json({ error: "Error deleting goal" });
   });
-  res.status(200).send();
+  res.status(200).json({ success: true, data: { goalID } });
 });
 
 export default router;

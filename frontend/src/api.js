@@ -10,6 +10,7 @@ export async function apiFetch(endpoint, options = {}) {
 
   const config = {
     ...options,
+    body: options.body ? JSON.stringify(options.body) : undefined,
     headers: defaultHeaders,
   };
 

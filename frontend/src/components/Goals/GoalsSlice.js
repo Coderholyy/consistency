@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { apiFetch } from "api";
 import Axios from "axios";
 
 export const getGoals = createAsyncThunk(
@@ -7,10 +8,10 @@ export const getGoals = createAsyncThunk(
     // call the api for get /goals
     try {
       const { token } = userInfo;
-      const response = await Axios.get("/goals", {
+      const data = await apiFetch("/goals", {
         headers: { Authorization: "Bearer " + token },
       });
-      return response.data;
+      return data;
     } catch (error) {
       const { rejectWithValue } = thunkAPI;
       return rejectWithValue(error.response.data);

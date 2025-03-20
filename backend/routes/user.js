@@ -60,7 +60,7 @@ router.post("/register", userInfoValidation("register"), async (req, res) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(401).send(errors.array());
+    return res.status(401).json({ errors: errors.array() });
   }
   const { firstName, lastName, email, password } = req.body;
 
@@ -74,15 +74,11 @@ router.post("/register", userInfoValidation("register"), async (req, res) => {
 
   const queryRes = await pool
     .query(createUserQuery)
-    .catch(() =>
-      res
-        .status(401)
-        .send([{ param: "registrationError", msg: "Unable to add user." }])
-    );
+    .catch(() => res.status(401).json({ error: "Invalid Credentials" }));
 
   const newUser = queryRes.rows[0];
 
-  res.send({ ...newUser, token: getToken(newUser) });
+  res.json({ success: true, data: { ...newUser, token: getToken(newUser) } });
 });
 
 router.post("/signin", userInfoValidation("signin"), async (req, res) => {
@@ -90,7 +86,7 @@ router.post("/signin", userInfoValidation("signin"), async (req, res) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(401).send(errors.array());
+    return res.status(401).json({ errors: errors.array() });
   }
 
   // check if email exists in the DB
@@ -102,9 +98,8 @@ router.post("/signin", userInfoValidation("signin"), async (req, res) => {
   const queryRes = await pool.query(queryForUser);
   const listOfUsers = queryRes.rows;
   if (listOfUsers.length === 0) {
-    return res
-      .status(401)
-      .send([{ param: "userNotFound", msg: "Incorrect email or password" }]);
+    return res.status(401).json({ error: "Invalid Credentials" });
+    // .send([{ param: "userNotFound", msg: "Incorrect email or password" }]);
   }
 
   // check if pw from DB matches entered password
@@ -114,12 +109,15 @@ router.post("/signin", userInfoValidation("signin"), async (req, res) => {
     possibleUser.passwordhash
   );
   if (!checkPasswordMatch) {
-    return res
-      .status(401)
-      .send([{ param: "userNotFound", msg: "Incorrect email or password" }]);
+    return res.status(401).json({ error: "Password doesnt match" });
   }
   const { passwordhash, ...userWithoutPw } = possibleUser;
-  res.send({ ...userWithoutPw, token: getToken(userWithoutPw) });
+  res
+    .status(200)
+    .json({
+      data: { ...userWithoutPw, token: getToken(userWithoutPw) },
+      success: true,
+    });
 });
 
 export default router;
