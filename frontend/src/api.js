@@ -1,4 +1,5 @@
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:5001"; // Fallback for local dev
+const API_BASE_URL =
+  process.env.API_BASE_URL || "https://consistency.onrender.com:5001/"; // Fallback for local dev
 
 export async function apiFetch(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
