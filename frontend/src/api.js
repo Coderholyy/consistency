@@ -1,5 +1,5 @@
 const API_BASE_URL =
-  process.env.API_BASE_URL || "https://consistency.onrender.com/api"; // Fallback for local dev
+  process.env.API_BASE_URL || "https://consistency.onrender.com"; // Fallback for local dev
 
 export async function apiFetch(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
