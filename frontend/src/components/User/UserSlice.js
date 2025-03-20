@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import Axios from "axios";
+import { apiFetch } from "api";
 
 const userInfoString = localStorage.getItem("user_info");
 const currentUserInfo = userInfoString ? JSON.parse(userInfoString) : null;
@@ -14,19 +14,17 @@ export const registerUser = createAsyncThunk(
   "user/register",
   async (userInfo, thunkAPI) => {
     // error handling
-    const {
-      loading,
-      currentRequestID,
-    } = thunkAPI.getState().user.registerState;
+    const { loading, currentRequestID } =
+      thunkAPI.getState().user.registerState;
     if (loading !== "pending" || thunkAPI.requestId !== currentRequestID) {
       return;
     }
 
     try {
       // make API call to /register
-      const response = await Axios.post("/user/register", userInfo);
-      localStorage.setItem("user_info", JSON.stringify(response.data));
-      return response.data;
+      const data = await apiFetch("/user/register", userInfo);
+      localStorage.setItem("user_info", JSON.stringify(data));
+      return data;
     } catch (error) {
       const { rejectWithValue } = thunkAPI;
       return rejectWithValue(error.response.data);
@@ -45,9 +43,9 @@ export const signinUser = createAsyncThunk(
 
     try {
       // make API call to /signin
-      const response = await Axios.post("/user/signin", userInfo);
-      localStorage.setItem("user_info", JSON.stringify(response.data));
-      return response.data;
+      const data = await apiFetch("/user/signin", userInfo);
+      localStorage.setItem("user_info", JSON.stringify(data));
+      return data;
     } catch (error) {
       const { rejectWithValue } = thunkAPI;
       return rejectWithValue(error.response.data);
@@ -121,9 +119,6 @@ const userSlice = createSlice({
     },
   },
 });
-export const {
-  logoutUser,
-  resetRegisterState,
-  resetSigninState,
-} = userSlice.actions;
+export const { logoutUser, resetRegisterState, resetSigninState } =
+  userSlice.actions;
 export default userSlice.reducer;
