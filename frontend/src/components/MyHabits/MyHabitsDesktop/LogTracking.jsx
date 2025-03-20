@@ -1,3 +1,4 @@
+import { apiFetch } from "api";
 import { useUserId } from "hooks/useUserId";
 import React, { useState, useEffect } from "react";
 import { formatDate } from "utils/formatDate";
@@ -9,8 +10,7 @@ const LogTracking = ({ title, trackingId, type, isHistory = false }) => {
 
   const fetchLogs = async () => {
     try {
-      const response = await fetch(`/trackings/logs/${userId}/${type}`);
-      const data = await response.json();
+      const data = await apiFetch(`/trackings/logs/${userId}/${type}`);
       setLogs(data?.data);
     } catch (error) {
       console.error("Error fetching logs:", error);
@@ -20,7 +20,7 @@ const LogTracking = ({ title, trackingId, type, isHistory = false }) => {
   const logProgress = async () => {
     if (!quantity) return;
     try {
-      const response = await fetch(`/trackings/log`, {
+      const newLog = await apiFetch(`/trackings/log`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -30,7 +30,6 @@ const LogTracking = ({ title, trackingId, type, isHistory = false }) => {
           quantity: Number(quantity),
         }),
       });
-      const newLog = await response.json();
       setLogs((prevLogs) =>
         Array.isArray(prevLogs) ? [newLog, ...prevLogs] : [newLog]
       );

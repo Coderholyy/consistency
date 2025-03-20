@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import LogTracking from "./LogTracking";
 import { useUserId } from "hooks/useUserId";
 import styled from "styled-components";
+import { apiFetch } from "api";
 
 const Table = styled.table`
   width: 100%;
@@ -43,8 +44,7 @@ const TrackingDashboard = () => {
 
   const fetchTrackings = async () => {
     try {
-      const response = await fetch(`/trackings/${userId}/${type}`);
-      const data = await response.json();
+      const data = await apiFetch(`/trackings/${userId}/${type}`);
       setTrackings(data?.data);
     } catch (error) {
       console.error("Error fetching trackings:", error);

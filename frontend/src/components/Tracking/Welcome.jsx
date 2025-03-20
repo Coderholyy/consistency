@@ -3,6 +3,7 @@ import LogTracking from "../MyHabits/MyHabitsDesktop/LogTracking";
 import { useUserId } from "hooks/useUserId";
 import styled from "styled-components";
 import CreateTracking from "../MyHabits/MyHabitsDesktop/CreateTracking";
+import { apiFetch } from "api";
 // import AddBoxIcon from "@mui/icons-material/AddBox";
 
 const GridContainer = styled.div`
@@ -49,8 +50,7 @@ const Tracking = () => {
 
   const fetchTrackings = async () => {
     try {
-      const response = await fetch(`/trackings/${userId}/${type}`);
-      const data = await response.json();
+      const data = await apiFetch(`/trackings/${userId}/${type}`);
       setTrackings(data?.data);
     } catch (error) {
       console.error("Error fetching trackings:", error);
@@ -64,7 +64,7 @@ const Tracking = () => {
         <CreateTracking />
       </FlexHeader>
       <GridContainer>
-        {trackings.length > 0 ? (
+        {trackings?.length > 0 ? (
           trackings.map((tracking, index) => (
             <TrackingGridItem key={tracking.id}>
               <h5 className="text-lg font-semibold">{tracking.title}</h5>
